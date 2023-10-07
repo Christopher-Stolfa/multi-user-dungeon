@@ -46,9 +46,12 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	fmt.Fprintf(w, "Hello World")
 	ws, err := upgrader.Upgrade(w, r, nil)
+	err = ws.WriteMessage(1, []byte("Hi client"))
 	if err != nil {
 		log.Println(err)
 	}
+	log.Println("Client connected")
+	reader(ws)
 }
 
 func setupRoutes() {
