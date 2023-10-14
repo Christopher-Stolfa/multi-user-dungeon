@@ -4,27 +4,28 @@
   flex-direction: column;
   height: 100vh;
   width: 100%;
-  .container {
-    position: relative;
+  padding: 0 13%;
+  .chat-view,
+  .input-group {
+    --tw-bg-opacity: 1;
+    background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+  }
+  .chat-view {
+    flex: 1;
+  }
+  .input-group {
     display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    .chat-view {
-      flex: 1;
-      --tw-bg-opacity: 1;
-      background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+    flex-direction: row;
+    padding: 1rem;
+    input {
+      background-color: #fff;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
     }
-    .input-group {
-      display: flex;
-      flex-direction: row;
-      .input-field {
-        width: 100%;
-      }
-      .send-button {
-        background-color: rgb(21, 101, 192);
-        width: 10rem;
-      }
+    button {
+      width: 10rem;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
     }
   }
   h1 {
