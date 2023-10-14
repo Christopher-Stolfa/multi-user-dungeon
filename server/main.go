@@ -27,6 +27,7 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	flag.Parse()
 	hub := newHub()
 	go hub.run()
