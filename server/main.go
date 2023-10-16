@@ -9,6 +9,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 var addr = flag.String("addr", ":8080", "http service address")
@@ -26,8 +28,7 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "home.html")
 }
 
-func main() {
-	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
+func setupRoutes() {
 	flag.Parse()
 	hub := newHub()
 	go hub.run()
@@ -35,12 +36,31 @@ func main() {
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(hub, w, r)
 	})
+}
+
+func startServer() {
+	// Allow any origin for now
+	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
+	// Create a server instance
 	server := &http.Server{
 		Addr:              *addr,
 		ReadHeaderTimeout: 3 * time.Second,
 	}
+	// Run the server
 	err := server.ListenAndServe()
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
+}
+
+func main() {
+	// Load env variables
+	dotEnvErr := godotenv.Load()
+	if dotEnvErr != nil {
+		log.Fatal("Error loading .env file")
+	}
+	// db, err := setupDatabase()
+	setupDatabase()
+	setupRoutes()
+	startServer()
 }
