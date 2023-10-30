@@ -53,13 +53,17 @@ func startServer() {
 	}
 }
 
-func main() {
+func setupDotEnv() {
 	// Load env variables
 	dotEnvErr := godotenv.Load()
 	if dotEnvErr != nil {
 		log.Fatal("Error loading .env file")
 	}
+}
+
+func main() {
 	// db, err := setupDatabase()
+	setupDotEnv()
 	setupDatabase()
 	setupRoutes()
 	startServer()
