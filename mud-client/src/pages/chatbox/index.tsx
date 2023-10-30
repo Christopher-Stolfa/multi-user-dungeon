@@ -3,16 +3,30 @@ import "../../app/globals.css";
 import { FormikHelpers, FormikProvider, useFormik } from "formik";
 import ChatboxForm from "./ChatboxForm";
 import { useWebsocketContext } from "@/contexts/WebsocketProvider";
-interface IValues {
+export interface IChatboxFormValues {
   input: string;
 }
 const Chatbox = () => {
   const { socket, messages } = useWebsocketContext();
-  const formik = useFormik<IValues>({
+
+  const validate = (values: IChatboxFormValues) => {
+    const errors: Partial<IChatboxFormValues> = {};
+    if (!values?.input) {
+      errors.input = "Required";
+    }
+    return errors;
+  };
+  const formik = useFormik<IChatboxFormValues>({
     initialValues: {
       input: "",
     },
-    onSubmit: async (values: IValues, actions: FormikHelpers<IValues>) => {
+    validate,
+    validateOnChange: true,
+    validateOnMount: true,
+    onSubmit: async (
+      values: IChatboxFormValues,
+      actions: FormikHelpers<IChatboxFormValues>
+    ) => {
       if (socket) {
         socket.send(values?.input);
         actions.resetForm();

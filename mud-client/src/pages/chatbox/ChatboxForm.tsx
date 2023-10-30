@@ -1,20 +1,21 @@
 import styles from "./Chatbox.module.scss";
 import { Button, FormControl, Input } from "@chakra-ui/react";
-import { Field, Form, useFormikContext } from "formik";
+import { Field, FieldProps, Form, useField, useFormikContext } from "formik";
+import { IChatboxFormValues } from ".";
 
 const ChatboxForm = () => {
-  const formik = useFormikContext(); // Access the Formik context
+  const { isSubmitting } = useFormikContext<IChatboxFormValues>();
   return (
     <Form>
       <FormControl>
         <Field name="input">
-          {({ field }: any) => (
+          {({ field, meta }: FieldProps) => (
             <div className={styles["input-group"]}>
               <Input {...field} id="input" placeholder="Input " />
               <Button
                 loadingText="Sending..."
-                isDisabled={formik?.isSubmitting}
-                isLoading={formik?.isSubmitting}
+                isDisabled={isSubmitting || !!meta?.error}
+                isLoading={isSubmitting}
                 type="submit"
                 colorScheme="teal"
               >
