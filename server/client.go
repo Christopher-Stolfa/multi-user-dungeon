@@ -68,7 +68,7 @@ func (c *Client) readPump() {
 			}
 			break
 		}
-		message = eventHandler(message)
+		message = prepareMessageEvent(message)
 		c.hub.broadcast <- message
 	}
 }
