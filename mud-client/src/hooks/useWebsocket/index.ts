@@ -11,6 +11,8 @@ type TPayloadTypeMap = {
 
 type TPayload = {
   message: string;
+  error: string | null;
+  data: any;
 };
 type TWebSocketData = {
   type: EEventType;
@@ -48,6 +50,18 @@ const useWebsocket = (url: string) => {
       if (jsonEvent?.type === EEventType.SendMessage) {
         const nextMessage = jsonEvent?.payload?.message;
         console.log("Received message:", nextMessage);
+        setMessages((prev) => [...prev, nextMessage]);
+      }
+      if (jsonEvent.type === EEventType.Command) {
+        const nextMessage = JSON.stringify(jsonEvent?.payload?.data);
+        console.log("Received data from command:");
+        console.group(jsonEvent?.payload);
+        setMessages((prev) => [...prev, nextMessage]);
+      }
+      if (jsonEvent?.payload?.error) {
+        const nextMessage = JSON.stringify(jsonEvent?.payload?.error);
+        console.log("Received an error:");
+        console.log(jsonEvent?.payload?.error);
         setMessages((prev) => [...prev, nextMessage]);
       }
     };
